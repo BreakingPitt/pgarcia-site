@@ -1,0 +1,32 @@
+:root {
+  /* Light mode – pastel blanco/amarillo */
+  --background-color: #fffdf7;      /* casi blanco, cálido */
+  --heading-color:   #7c6b3b;       /* marrón suave para títulos */
+  --text-color:      #4b4630;       /* gris/marrón suave para texto */
+  --link-color:      #d4a017;       /* amarillo mostaza pastel */
+  --visited-color:   #b48815;       /* versión un poco más oscura */
+  --main-color:      #ffe08a;       /* amarillo pastel principal */
+  --code-background-color: #fff5cc; /* fondo suave para bloques de código */
+  --code-color:      #4b4630;
+  --blockquote-color:#e3c97a;       /* borde/acento de citas */
+  --glow-color-light:  rgba(255, 224, 138, 0.3);
+  --glow-color-medium: rgba(255, 224, 138, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode compatible con la paleta pastel */
+    --background-color: #1f1b10;
+    --heading-color:    #ffe9a3;
+    --text-color:       #f5f0da;
+    --link-color:       #ffd769;
+    --visited-color:    #f5c652;
+    --main-color:       #c9a43a;
+    --code-background-color: #2a2413;
+    --code-color:       #ffe9a3;
+    --blockquote-color: #8a7432;
+    --glow-color-light:  rgba(255, 215, 105, 0.3);
+    --glow-color-medium: rgba(255, 215, 105, 0.5);
+  }
+}
+

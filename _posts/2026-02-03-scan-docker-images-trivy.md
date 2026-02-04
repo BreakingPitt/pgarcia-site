@@ -86,7 +86,7 @@ A typical mapping looks like this:
 In practice you’ll often run image scans focusing only on the top end, for example:
 
 ```bash
-trivy image --severity HIGH,CRITICAL your-image:tag
+pgarcia@AnnMargret:~$ trivy image --severity HIGH,CRITICAL your-image:tag
 ```
 This lets you keep your reports actionable in CI/CD by failing builds only when serious issues are detected, while still allowing you to review Medium and Low findings periodically. 
 
@@ -99,7 +99,7 @@ You can install Trivy in multiple ways depending on your environment and workflo
 If you don’t have Trivy installed yet, you can install it on macOS with Homebrew:
 
 ```bash
-pgarcia@GraceKelly ~ % brew install trivy
+pgarcia@AnnMargret:~$ brew install trivy
 ```
 
 ### macOS Binary
@@ -111,25 +111,25 @@ Go to the official Trivy GitHub releases page and find the latest version for yo
 Download the correct binary for your OS and architecture, for example with ```curl```:
 
 ```bash
-pgarcia@GraceKelly ~ % curl -L "https://get.trivy.dev/trivy?type=tar.gz&version=0.63.0&os=macos&arch=amd64" -o trivy.tar.gz
+pgarcia@AnnMargret:~$ curl -L "https://get.trivy.dev/trivy?type=tar.gz&version=0.63.0&os=macos&arch=amd64" -o trivy.tar.gz
 ```
 
 * **Extract the contents of the tar.gz file -** Extract the contents of the archive and makes the Trivy binary available in your current directory for use or installation.
 
 ```bash
-pgarcia@GraceKelly ~ % tar -xvzf trivy.tar.gz
+pgarcia@AnnMargret:~$ tar -xvzf trivy.tar.gz
 ```
 
 * **Make it executable and move to your _PATH_ -** After downloading, you'll need to assign execution permissions and move it to a directory included in your system's PATH. This allows you to run Trivy from anywhere in your terminal.
 
 ```bash
-pgarcia@GraceKelly ~ % chmod +x trivy && sudo mv trivy /usr/local/bin/trivy
+pgarcia@AnnMargret:~$ chmod +x trivy && sudo mv trivy /usr/local/bin/trivy
 ```
 
 Once the installation is complete, verify that Trivy installation was successful by entering the following command in the terminal:
 
 ```bash
-pgarcia@GraceKelly ~ % trivy --version
+pgarcia@AnnMargret:~$ trivy --version
 Version: 0.63.0
 Java DB:
   Version: 1
@@ -146,7 +146,7 @@ If you prefer not to install Trivy locally, you can run it as a Docker container
 First, pull the official image from Docker Hub:
 
 ```bash
-pgarcia@GraceKelly ~ %  docker pull aquasec/trivy:latest
+pgarcia@AnnMargret:~$ docker pull aquasec/trivy:latest
 ```
 Then you can run scans by mounting the Docker socket or target directories into the Trivy container, depending on whether you want to scan local images or filesystems.
 
@@ -169,13 +169,13 @@ To see Trivy in action, let’s start with a small base image like Alpine Linux.
 First, pull the image you want to analyze, for example `alpine:3.18.12`:
 
 ```bash
-pgarcia@GraceKelly ~ % docker pull alpine:3.18.12
+pgarcia@AnnMargret:~$ docker pull alpine:3.18.12
 ```
 
 Once the image is available locally, you can run a basic vulnerability scan with Trivy:
 
 ```bash
-pgarcia@GraceKelly ~ % trivy image alpine:3.13.2
+pgarcia@AnnMargret:~$ trivy image alpine:3.13.2
 2025-02-17T16:30:02+01:00   INFO    [vuln] Vulnerability scanning is enabled
 2025-02-17T16:30:02+01:00   INFO    [secret] Secret scanning is enabled
 2025-02-17T16:30:02+01:00   INFO    [secret] If your scanning is slow, please try '--scanners vuln' to disable secret scanning
@@ -212,12 +212,12 @@ Total: 4 (CRITICAL: 4)
 By default, Trivy will show all detected vulnerabilities across severities. If you want to focus only on the most serious issues, you can filter by severity:
 
 ```bash
-pgarcia@GraceKelly ~ % trivy image --severity HIGH,CRITICAL alpine:3.18.12
+pgarcia@AnnMargret:~$ trivy image --severity HIGH,CRITICAL alpine:3.18.12
 ```
 You can also ignore vulnerabilities that don’t have a fixed version yet, which is useful to keep CI output focused on actionable problems:
 
 ```bash
-trivy image --severity HIGH,CRITICAL --ignore-unfixed alpine:3.18.12
+pgarcia@AnnMargret:~$ trivy image --severity HIGH,CRITICAL --ignore-unfixed alpine:3.18.12
 ```
 In the report, pay attention to fields like the package name, vulnerability ID (CVE), installed version and fixed version. These tell you exactly which package needs to be upgraded in your base image or Dockerfile to remediate the issue.
 
@@ -238,7 +238,7 @@ You can create this file manually based on previous scan results, or generate it
 By default, Trivy will pick up `.trivyignore` from the current working directory, but you can also point to a specific file path with the `--ignorefile` flag:
 
 ```bash
-pgarcia@GraceKelly ~ % trivy image --ignorefile .trivyignore alpine:3.18.12
+pgarcia@AnnMargret:~$ trivy image --ignorefile .trivyignore alpine:3.18.12
 ```
 Used carefully, ignore files help you keep vulnerability reports actionable without hiding truly critical problems that still need to be fixed.
 
@@ -280,7 +280,7 @@ With this configuration, Trivy will scan only for vulnerabilities and secrets, s
 To use it during a scan:
 
 ```bash
-pgarcia@GraceKelly ~ % trivy image --config trivy.yaml alpine:3.18.12
+pgarcia@AnnMargret:~$ trivy image --config trivy.yaml alpine:3.18.12
 ```
 ## Integrating Trivy with GitHub Actions
 

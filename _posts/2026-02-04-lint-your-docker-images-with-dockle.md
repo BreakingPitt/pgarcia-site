@@ -95,7 +95,7 @@ Understanding these levels makes it easier to decide when a Dockle finding shoul
   If you do not have Dockle installed yet, you can install it on macOS with Homebrew (https://brew.sh/):
 
 ```bash
-  brew install goodwithtech/r/dockle
+pgarcia@AnnMargret:~$ brew install goodwithtech/r/dockle
 ```
 
 ### macOS binary
@@ -109,27 +109,27 @@ Understanding these levels makes it easier to decide when a Dockle finding shoul
 
 
 ```bash
-  curl -L -o dockle.tar.gz "https://github.com/goodwithtech/dockle/releases/download/v0.4.15/dockle_0.4.15_macOS-64bit.tar.gz"
+pgarcia@AnnMargret:~$ curl -L -o dockle.ta.gz "https://github.com/goodwithtech/dockle/releases/download/v0.4.15/dockle_0.4.15_macOS-64bit.tar.gz"
 ```
 
   - Extract the contents of the tar.gz file – Extract the contents of the archive to make the Dockle binary available in your current directory:
 
 
 ```bash
-   tar -xvzf dockle.tar.gz
+pgarcia@AnnMargret:~$ tar -xvzf dockle.tar.gz
 ```
 
   - Make it executable and move it to your PATH – After downloading, assign execution permissions and move it to a directory included in your system’s PATH. This allows you to run Dockle from anywhere in your terminal:
 
 
 ```bash
-    chmod +x dockle-* && sudo mv dockle-* /usr/local/bin/dockle
+pgarcia@AnnMargret:~$ chmod +x dockle-* && sudo mv dockle-* /usr/local/bin/dockle
 ```
 
 Once the installation is complete, verify that Dockle was installed successfully by entering the following command in the terminal:
 
 ```bash
-  dockle --version
+pgarcia@AnnMargret:~$ dockle --version
   # dockle version 0.4.15
 ```
 
@@ -145,7 +145,7 @@ Before you can use Dockle in a container, you need to pull the official image fr
 
 
 ```bash
-  docker pull goodwithtech/dockle:latest
+pgarcia@AnnMargret:~$ docker pull goodwithtech/dockle:latest
 ```
 
 ## How to use Dockle to scan a Docker image
@@ -153,14 +153,14 @@ Before you can use Dockle in a container, you need to pull the official image fr
 Let’s start by downloading the latest official `mongo` Docker image using the `docker pull` command:
 
 ```bash
-  docker pull mongo:latest
+pgarcia@AnnMargret:~$ docker pull mongo:latest
 ```
 This image is maintained by the MongoDB team and includes everything needed to run a MongoDB instance in a container. By using the `latest` tag we get the most recent stable version, although Dockle will later recommend using a fixed tag for better traceability.
 
 Once the image is downloaded, we can scan it with Dockle to evaluate its security posture and ensure it follows container best practices before using it in a production environment:
 
 ```bash
-  docker run --rm goodwithtech/dockle:latest mongo:latest
+pgarcia@AnnMargret:~$ docker run --rm goodwithtech/dockle:latest mongo:latest
 ```
 
 Example output (truncated for brevity):
@@ -193,14 +193,14 @@ If you want to store your Dockle scan results for further analysis, auditing or 
 To export Dockle scan results in JSON format:
 
 ```bash
-  docker run --rm -v "$(pwd)":/output goodwithtech/dockle:latest -f json -o /output/scan_results.json mongo:latest
+pgarcia@AnnMargret:~$ docker run --rm -v "$(pwd)":/output goodwithtech/dockle:latest -f json -o /output/scan_results.json mongo:latest
 ```
 
 Once you have exported the scan results to a file, you can use the cat command to view the contents directly in your terminal:
 
 
 ```bash
-  cat scan_results.json
+pgarcia@AnnMargret:~$ cat scan_results.json
 ```
 
 The resulting JSON file contains a summary of the number of findings per level (fatal, warn, info, skip, pass) and a detailed list of checks, including their code, title, severity level and associated alerts. This structure makes it easy to parse the results programmatically, feed them into dashboards or import them into other security tools.
@@ -216,7 +216,7 @@ This file lets you specify checks to skip by their code, so you can bypass findi
 Here is an example of how you can configure Dockle using a `.dockleignore` file:
 
 ```bash
-  cat .dockleignore
+pgarcia@AnnMargret:~$ cat .dockleignore
 ```
 
 ```
@@ -233,7 +233,7 @@ Here is an example of how you can configure Dockle using a `.dockleignore` file:
   #
   # Include any other checks that are irrelevant or need to be skipped for your image
 ```
-  As with any ignore file, use `.dockleignore` sparingly: it is better to fix important findings where possible and only ignore checks that you fully understand and have documented as accepted risk.
+As with any ignore file, use `.dockleignore` sparingly: it is better to fix important findings where possible and only ignore checks that you fully understand and have documented as accepted risk.
 
 ## CI/CD integration: Using Dockle with GitHub Actions
 
@@ -315,11 +315,8 @@ Whether you are working in a fast‑moving DevOps team or deploying critical inf
 
 ## Resources
 
-  - Dockle GitHub repository – Official source code, releases and documentation: https://github.com/goodwithtech/dockle
-  - CIS Docker Benchmark – Industry‑recognised standards for container security practices: https://www.cisecurity.org/benchmark/docker
-  - Trivy – Scans images, filesystems and Git repositories for known vulnerabilities: https://github.com/aquasecurity/trivy
-  - Hadolint – Pre‑build linter for Dockerfiles to enforce syntax and security best practices: https://github.com/hadolint/hadolint
-  - Grype – Open‑source tool for scanning container images for vulnerabilities with SBOM support: https://github.com/anchore/grype
-  - Docker Hub – Central repository for Docker images, including official containers like `mongo`: https://hub.docker.com/
-  - GitHub Actions documentation – Learn how to automate workflows and integrate Dockle into your CI/CD pipeline: https://docs.github.com/en/actions
-
+  - **Dockle GitHub repository –** [Official source code, releases and documentation](https://github.com/goodwithtech/dockle)
+  - **CIS Docker Benchmark –** [Industry‑recognised standards for container security practices](https://www.cisecurity.org/benchmark/docker)
+  - **Trivy –** [Official source code, releases and documentation](https://github.com/aquasecurity/trivy)
+  - **Hadolint –** [Official source code, releases and documentation](https://github.com/hadolint/hadolint)
+  - **Grype –** [Official source code, releases and documentation](https://github.com/anchore/grype)

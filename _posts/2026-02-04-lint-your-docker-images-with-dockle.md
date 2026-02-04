@@ -86,18 +86,19 @@ Dockle uses five distinct check levels to classify the issues it detects when sc
 Understanding these levels makes it easier to decide when a Dockle finding should fail a build and when it can be monitored or documented instead.
 
 
-  ## Installing Dockle
+## Installing Dockle
 
   You can install Dockle in multiple ways depending on your environment, workflow or operating system preferences. This makes it easy to integrate it both on developer machines and in automated pipelines.
 
-  ### macOS (via Homebrew)
+### macOS (via Homebrew)
 
   If you do not have Dockle installed yet, you can install it on macOS with Homebrew (https://brew.sh/):
 
 ```bash
   brew install goodwithtech/r/dockle
 ```
-  ### macOS binary
+
+### macOS binary
 
   Dockle can be downloaded as a standalone binary for your platform from the GitHub releases page. This method is lightweight, fast and ideal for scripting or integrating into CI environments where Docker or a package manager might not be available.
 
@@ -106,10 +107,13 @@ Understanding these levels makes it easier to decide when a Dockle finding shoul
   - Access the releases page – Go to the official Dockle GitHub releases page (https://github.com/goodwithtech/dockle/releases), where you will find the latest versions for multiple platforms.
   - Download the correct binary – Choose the binary that matches your OS and architecture, such as dockle_0.4.15_macOS-64bit.tar.gz. You can also download it directly from the command line using curl:
 
+
 ```bash
   curl -L -o dockle.tar.gz "https://github.com/goodwithtech/dockle/releases/download/v0.4.15/dockle_0.4.15_macOS-64bit.tar.gz"
 ```
+
   - Extract the contents of the tar.gz file – Extract the contents of the archive to make the Dockle binary available in your current directory:
+
 
 ```bash
    tar -xvzf dockle.tar.gz
@@ -117,45 +121,49 @@ Understanding these levels makes it easier to decide when a Dockle finding shoul
 
   - Make it executable and move it to your PATH – After downloading, assign execution permissions and move it to a directory included in your system’s PATH. This allows you to run Dockle from anywhere in your terminal:
 
+
 ```bash
     chmod +x dockle-* && sudo mv dockle-* /usr/local/bin/dockle
 ```
-  Once the installation is complete, verify that Dockle was installed successfully by entering the following command in the terminal:
+
+Once the installation is complete, verify that Dockle was installed successfully by entering the following command in the terminal:
 
 ```bash
   dockle --version
   # dockle version 0.4.15
 ```
 
-  This method is lightweight and ideal for scripting or for integrating Dockle into local or CI/CD workflows without using a package manager.
+This method is lightweight and ideal for scripting or for integrating Dockle into local or CI/CD workflows without using a package manager.
 
-  ### Docker
+### Docker
 
-  If you prefer not to install Dockle locally, you can use Docker as an alternative. This method is fully cross‑platform and particularly convenient in CI/CD pipelines or ephemeral environments.
+If you prefer not to install Dockle locally, you can use Docker as an alternative. This method is fully cross‑platform and particularly convenient in CI/CD pipelines or ephemeral environments.
 
-  #### Pull the Dockle Docker image
+#### Pull the Dockle Docker image
 
-  Before you can use Dockle in a container, you need to pull the official image from Docker Hub. This ensures you are using a recent version and avoids installation dependencies on your local system. To download the official Dockle image from Docker Hub, run:
+Before you can use Dockle in a container, you need to pull the official image from Docker Hub. This ensures you are using a recent version and avoids installation dependencies on your local system. To download the official Dockle image from Docker Hub, run:
+
 
 ```bash
   docker pull goodwithtech/dockle:latest
 ```
 
-  ## How to use Dockle to scan a Docker image
+## How to use Dockle to scan a Docker image
 
-  Let’s start by downloading the latest official `mongo` Docker image using the `docker pull` command:
+Let’s start by downloading the latest official `mongo` Docker image using the `docker pull` command:
 
 ```bash
   docker pull mongo:latest
 ```
-  This image is maintained by the MongoDB team and includes everything needed to run a MongoDB instance in a container. By using the `latest` tag we get the most recent stable version, although Dockle will later recommend using a fixed tag for better traceability.
+This image is maintained by the MongoDB team and includes everything needed to run a MongoDB instance in a container. By using the `latest` tag we get the most recent stable version, although Dockle will later recommend using a fixed tag for better traceability.
 
-  Once the image is downloaded, we can scan it with Dockle to evaluate its security posture and ensure it follows container best practices before using it in a production environment:
+Once the image is downloaded, we can scan it with Dockle to evaluate its security posture and ensure it follows container best practices before using it in a production environment:
 
 ```bash
   docker run --rm goodwithtech/dockle:latest mongo:latest
 ```
-  Example output (truncated for brevity):
+
+Example output (truncated for brevity):
 
 ```bash
   WARN - CIS-DI-0001: Create a user for the container
@@ -173,39 +181,44 @@ Understanding these levels makes it easier to decide when a Dockle finding shoul
       * setuid file: urwxr-xr-x usr/bin/chsh
       ...
 ```
-  The output provided by Dockle is a categorised list of findings. It warns that the container is using the root user (CIS-DI-0001), which is a common security concern, and advises against using the latest tag (DKL-DI-0006) for better version control and traceability. It also highlights the absence of a HEALTHCHECK instruction, which helps ensure the container’s runtime health can be monitored effectively.
 
-  In a real project, you would typically address these findings by creating a custom Docker image based on mongo, adding a non‑root user, pinning a specific image tag and defining an appropriate HEALTHCHECK before running Dockle again.
+The output provided by Dockle is a categorised list of findings. It warns that the container is using the root user (CIS-DI-0001), which is a common security concern, and advises against using the latest tag (DKL-DI-0006) for better version control and traceability. It also highlights the absence of a HEALTHCHECK instruction, which helps ensure the container’s runtime health can be monitored effectively.
 
-  ## How to export Dockle scan results
+In a real project, you would typically address these findings by creating a custom Docker image based on mongo, adding a non‑root user, pinning a specific image tag and defining an appropriate HEALTHCHECK before running Dockle again.
 
-  If you want to store your Dockle scan results for further analysis, auditing or integration with other tools, Dockle provides built-in support for exporting output in structured formats such as JSON or SARIF.
+## How to export Dockle scan results
 
-  To export Dockle scan results in JSON format:
+If you want to store your Dockle scan results for further analysis, auditing or integration with other tools, Dockle provides built-in support for exporting output in structured formats such as JSON or SARIF.
+
+To export Dockle scan results in JSON format:
 
 ```bash
   docker run --rm -v "$(pwd)":/output goodwithtech/dockle:latest -f json -o /output/scan_results.json mongo:latest
 ```
-  Once you have exported the scan results to a file, you can use the cat command to view the contents directly in your terminal:
+
+Once you have exported the scan results to a file, you can use the cat command to view the contents directly in your terminal:
+
 
 ```bash
   cat scan_results.json
 ```
-  The resulting JSON file contains a summary of the number of findings per level (fatal, warn, info, skip, pass) and a detailed list of checks, including their code, title, severity level and associated alerts. This structure makes it easy to parse the results programmatically, feed them into dashboards or import them into other security tools.
 
-  In more advanced setups you can also export Dockle results in SARIF format, which is a standard format for static analysis tools and can be consumed by platforms such as GitHub code scanning or other security dashboards.
+The resulting JSON file contains a summary of the number of findings per level (fatal, warn, info, skip, pass) and a detailed list of checks, including their code, title, severity level and associated alerts. This structure makes it easy to parse the results programmatically, feed them into dashboards or import them into other security tools.
+
+In more advanced setups you can also export Dockle results in SARIF format, which is a standard format for static analysis tools and can be consumed by platforms such as GitHub code scanning or other security dashboards.
 
 ## Configuring Dockle
 
-  Dockle is a flexible tool that allows you to fine‑tune its security scanning behaviour to fit the needs of your project. By creating a `.dockleignore` file in your repository, you can control which checks Dockle evaluates or ignores for your Docker images.
+Dockle is a flexible tool that allows you to fine‑tune its security scanning behaviour to fit the needs of your project. By creating a `.dockleignore` file in your repository, you can control which checks Dockle evaluates or ignores for your Docker images.
 
-  This file lets you specify checks to skip by their code, so you can bypass findings that are not relevant for a particular image or that you have consciously accepted as risk.
+This file lets you specify checks to skip by their code, so you can bypass findings that are not relevant for a particular image or that you have consciously accepted as risk.
 
-  Here is an example of how you can configure Dockle using a `.dockleignore` file:
+Here is an example of how you can configure Dockle using a `.dockleignore` file:
 
 ```bash
   cat .dockleignore
 ```
+
 ```
   # .dockleignore
   #
@@ -222,11 +235,11 @@ Understanding these levels makes it easier to decide when a Dockle finding shoul
 ```
   As with any ignore file, use `.dockleignore` sparingly: it is better to fix important findings where possible and only ignore checks that you fully understand and have documented as accepted risk.
 
-  ## CI/CD integration: Using Dockle with GitHub Actions
+## CI/CD integration: Using Dockle with GitHub Actions
 
-  Automating Docker image security checks as part of your CI/CD pipeline is an essential step to ensure that best practices and security guidelines are always followed. GitHub Actions provides a convenient way to automate this process using Dockle.
+Automating Docker image security checks as part of your CI/CD pipeline is an essential step to ensure that best practices and security guidelines are always followed. GitHub Actions provides a convenient way to automate this process using Dockle.
 
-  The following example workflow builds a Docker image and then scans it with Dockle on every push to main or any pull request that touches a Dockerfile:
+The following example workflow builds a Docker image and then scans it with Dockle on every push to main or any pull request that touches a Dockerfile:
 
 ```yaml
   name: Scan Docker image with Dockle
@@ -259,11 +272,12 @@ Understanding these levels makes it easier to decide when a Dockle finding shoul
               goodwithtech/dockle:latest \
               my-image:latest
 ```
-  With this setup, GitHub Actions builds your image and then runs Dockle against it. If Dockle finds issues such as running as root, missing health checks or leftover sensitive files, the job will fail and the workflow logs will show the detailed findings.
 
-  For more advanced use cases you can replace the raw docker run step with the official dockle GitHub Action, which adds options such as configurable exit levels and output formats, and can produce JSON or SARIF reports that integrate with GitHub code scanning.
+With this setup, GitHub Actions builds your image and then runs Dockle against it. If Dockle finds issues such as running as root, missing health checks or leftover sensitive files, the job will fail and the workflow logs will show the detailed findings.
 
-  ## Frequently asked questions (FAQs)
+For more advanced use cases you can replace the raw docker run step with the official dockle GitHub Action, which adds options such as configurable exit levels and output formats, and can produce JSON or SARIF reports that integrate with GitHub code scanning.
+
+## Frequently asked questions (FAQs)
 
   - **What is Dockle used for?**  
     Dockle is a post‑build Docker image scanner that checks container images for security misconfigurations and best‑practice violations. It helps developers and DevOps teams ensure images are production‑ready and aligned with guidelines such as the CIS Docker Benchmark.
@@ -286,20 +300,20 @@ Understanding these levels makes it easier to decide when a Dockle finding shoul
   - **Does Dockle require Docker to be installed?**  
     Not necessarily. You can run Dockle as a container using the official Docker image, so even if you do not have the Dockle binary installed natively, you can still use it where Docker is available.
 
-  ## Conclusion
+## Conclusion
 
-  By integrating Dockle into your container security workflow, you can greatly enhance the quality and safety of your Docker images. Dockle helps ensure that:
+By integrating Dockle into your container security workflow, you can greatly enhance the quality and safety of your Docker images. Dockle helps ensure that:
 
   - Docker images follow container security best practices.
   - Misconfigurations such as missing HEALTHCHECK instructions or running as root are flagged early.
   - Builds are production‑ready and aligned with standards like the CIS Docker Benchmark.
   - CI/CD pipelines automatically enforce compliance and prevent insecure images from being deployed.
 
-  Dockle goes beyond traditional Dockerfile linting tools by analysing the final image, offering insights into issues that only appear post‑build. It encourages teams to adopt a proactive approach to container hardening and secure image delivery.
+Dockle goes beyond traditional Dockerfile linting tools by analysing the final image, offering insights into issues that only appear post‑build. It encourages teams to adopt a proactive approach to container hardening and secure image delivery.
 
-  Whether you are working in a fast‑moving DevOps team or deploying critical infrastructure, adding Dockle to your workflow is a lightweight but powerful step toward ensuring secure, consistent and standards‑compliant Docker images. As with any tool, Dockle works best when combined with thoughtful configuration: customise checks using `.dockleignore`, and pair it with other tools like Hadolint or Trivy for full coverage across your container lifecycle.
+Whether you are working in a fast‑moving DevOps team or deploying critical infrastructure, adding Dockle to your workflow is a lightweight but powerful step toward ensuring secure, consistent and standards‑compliant Docker images. As with any tool, Dockle works best when combined with thoughtful configuration: customise checks using `.dockleignore`, and pair it with other tools like Hadolint or Trivy for full coverage across your container lifecycle.
 
-  ## Resources
+## Resources
 
   - Dockle GitHub repository – Official source code, releases and documentation: https://github.com/goodwithtech/dockle
   - CIS Docker Benchmark – Industry‑recognised standards for container security practices: https://www.cisecurity.org/benchmark/docker

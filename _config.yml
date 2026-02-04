@@ -22,8 +22,8 @@ title: Threads of consciousness...
 email: pgarcia@proton.me
 description: >- # this means to ignore newlines until "baseurl:"
   At the crossroads of cloud engineering, DevOps, and platform reliability, this site focuses on real-world experiences building scalable systems on AWS and GCP. It covers infrastructure as code with Kubernetes, Terraform, and Pulumi; GitOps workflows with ArgoCD, Flux, and Helm; and observability with Prometheus, Grafana, Loki, and OpenTelemetry. You will find practical posts on DevOps culture, SRE, incident management, and CI/CD, with an emphasis on automation, shared learning, and sustainable engineering practices.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://blog.pgarcia.es" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/blog" # the subpath of your site, e.g. /blog
+url: "http://www.pgarcia.es" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: jekyllrb
 github_username: BreakingPitt
 
